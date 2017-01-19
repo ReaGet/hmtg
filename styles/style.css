@@ -14,9 +14,11 @@ html, body {
 header {
 	left: 0;
 	right: 0;
-	height: 200px;
+	height: 199px;
 	position: absolute;
 	box-shadow: 0 0 8px 3px rgba(0, 0, 0, .1);
+	border-bottom: 1px solid #aaa;
+	z-index: 100;
 }
 
 header h3 {
@@ -99,12 +101,37 @@ header ul li a.cost-icon:hover {
 	background-image: url("../res/cost-icon-active-1.png");
 }
 
+header ul li a#active-link {
+	margin: 0 10px 0px 10px;
+	border-bottom: 5px solid #ff7777;
+}
+
 #container {
-	width: 100%;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	margin-top: 200px;
 	position: absolute;
 	background: #f9f9f9;
 }
 
 #container #pages {
+	width: 100%;
+	height: 100%;
+	list-style: none;
+	overflow: hidden;
+}
 
+#container #pages .page {
+	background-color: #f9f9f9;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 120px;
+}
+
+#container #pages .active-page {
+	z-index: 1;
 }
