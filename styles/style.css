@@ -36,7 +36,7 @@ header h3:before {
 	margin: 25px 7px;
 }
 
-header ul {
+header #tabs {
 	list-style: none;
 	position: absolute;
 	display: table;
@@ -46,13 +46,13 @@ header ul {
 	height: 40px;
 }
 
-header ul li {
+header #tabs li {
 	display: table-cell;
 	text-align: center;
 	line-height: 40px;
 }
 
-header ul li a {
+header #tabs li a {
 	display: block;
 	text-decoration: none;
 	color: #e3e3e3;
@@ -61,47 +61,41 @@ header ul li a {
 	transition: border-color .2s ease-in-out;
 	text-indent: 100%;
 	overflow: hidden;
+	background-repeat: no-repeat;
+	background-size: 24px;
+	background-position: center;
 }
 
-header ul li a:hover {
+header #tabs li a:hover {
 	margin: 0 10px 0px 10px;
 	border-bottom: 5px solid #ff7777;
 }
 
-header ul li a.products-icon {
+header #tabs li a.products-icon {
 	background-image: url("../res/products-icon-2.png");
-	background-repeat: no-repeat;
-	background-size: 24px;
-	background-position: center;
 }
 
-header ul li a.products-icon:hover {
+header #tabs li a.products-icon:hover {
 	background-image: url("../res/products-icon-active-2.png");
 }
 
-header ul li a.people-icon {
+header #tabs li a.people-icon {
 	background-image: url("../res/people-icon-1.png");
-	background-repeat: no-repeat;
-	background-size: 24px;
-	background-position: center;
 }
 
-header ul li a.people-icon:hover {
+header #tabs li a.people-icon:hover {
 	background-image: url("../res/people-icon-active-1.png");
 }
 
-header ul li a.cost-icon {
+header #tabs li a.cost-icon {
 	background-image: url("../res/cost-icon-1.png");
-	background-repeat: no-repeat;
-	background-size: 24px;
-	background-position: center;
 }
 
-header ul li a.cost-icon:hover {
+header #tabs li a.cost-icon:hover {
 	background-image: url("../res/cost-icon-active-1.png");
 }
 
-header ul li a#active-link {
+header #tabs li a#active-tab {
 	margin: 0 10px 0px 10px;
 	border-bottom: 5px solid #ff7777;
 }
@@ -132,6 +126,6 @@ header ul li a#active-link {
 	line-height: 120px;
 }
 
-#container #pages .active-page {
+#container #pages #active-page {
 	z-index: 1;
 }

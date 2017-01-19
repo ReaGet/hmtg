@@ -199,3 +199,48 @@
 // 	$("products_list").innerText = "";
 // 	$("people_list_menu").innerText = "";
 // }
+
+(function() {
+	window.onload = function() {
+		var tabs = $("tabs").getElementsByTagName("li"),
+			pages = $("pages").getElementsByTagName("li");
+
+		tabs = toArray(tabs);
+		pages = toArray(pages);
+
+		window.addEventListener('mousedown', setActive);
+
+		function setActive(e) {
+			var elem = e.target;
+			var index = tabs.indexOf(elem.parentNode);
+			if (index > -1) {
+				if (elem.id == "active-tab")
+					return;
+
+				for (var i = 0; i < tabs.length; i++) {
+					tabs[i].childNodes[0].id = "";
+				}
+
+				elem.id = "active-tab";
+
+				for (var i = 0; i < pages.length; i++) {
+					pages[i].id = "";
+				}
+
+				pages[index].id = "active-page";
+			}
+		}
+
+		function toArray(arr) {
+			var t = [];
+			for (var i = 0; i < arr.length; i++) {
+				t.push(arr[i]);
+			}
+			return t;
+		} 
+
+		function $(id) {
+			return document.getElementById(id);
+		}
+	};
+})();
