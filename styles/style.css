@@ -61,9 +61,7 @@ header #tabs li a {
 	transition: border-color .2s ease-in-out;
 	text-indent: 100%;
 	overflow: hidden;
-	background-repeat: no-repeat;
-	background-size: 24px;
-	background-position: center;
+	position: relative;
 }
 
 header #tabs li a:hover {
@@ -71,10 +69,46 @@ header #tabs li a:hover {
 	border-bottom: 5px solid #ff7777;
 }
 
-header #tabs li a.products-icon {
-	background-image: url("../res/products-icon-2.png");
+header #tabs li a i {
+	display: block;
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	background-image: url("../res/spritesheet.png");
+	background-repeat: no-repeat;
+	background-size: 24px;
 }
 
+header #tabs li a.products-icon i {
+	background-position: 0 -96px;
+}
+
+header #tabs li a.products-icon-active i {
+	background-position: 0 -120px;
+}
+
+header #tabs li a.people-icon i {
+	background-position: 0 -48px;
+}
+
+header #tabs li a.people-icon-active i {
+	background-position: 0 -72px;
+}
+
+header #tabs li a.cost-icon i {
+	background-position: 0 0;
+}
+
+header #tabs li a.cost-icon-active i {
+	background-position: 0 -24px;
+}
+
+/*
 header #tabs li a.products-icon:hover {
 	background-image: url("../res/products-icon-active-2.png");
 }
@@ -93,7 +127,7 @@ header #tabs li a.cost-icon {
 
 header #tabs li a.cost-icon:hover {
 	background-image: url("../res/cost-icon-active-1.png");
-}
+} */
 
 header #tabs li a#active-tab {
 	margin: 0 10px 0px 10px;

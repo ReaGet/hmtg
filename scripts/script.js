@@ -211,17 +211,26 @@
 		window.addEventListener('mousedown', setActive);
 
 		function setActive(e) {
-			var elem = e.target;
-			var index = tabs.indexOf(elem.parentNode);
+			var elem = e.target,
+				index = tabs.indexOf(elem.parentNode),
+				className = elem.className;
+
+			if (elem.tagName.toLowerCase() == 'i') {
+				index = tabs.indexOf(elem.parentNode.parentNode);
+				elem = elem.parentNode;
+			}
+
 			if (index > -1) {
 				if (elem.id == "active-tab")
 					return;
 
 				for (var i = 0; i < tabs.length; i++) {
 					tabs[i].childNodes[0].id = "";
+					tabs[i].childNodes[0].className = tabs[i].childNodes[0].querySelector("i").className;
 				}
 
 				elem.id = "active-tab";
+				elem.className += "-active";
 
 				for (var i = 0; i < pages.length; i++) {
 					pages[i].id = "";
