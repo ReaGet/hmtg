@@ -1,6 +1,6 @@
 var utils = {};
 
-utils.swipedetect = function(el, callback) {
+utils.swipedetect = function(el, callback, preventDefault) {
 	var touchsurface = el,
 	    swipedir,
 	    startX,
@@ -13,8 +13,6 @@ utils.swipedetect = function(el, callback) {
 	    elapsedTime = 0,
 	    startTime = 0,
 	    handleswipe = callback || function(swipedir) { };
-
-	var test;
 			  
 	touchsurface.addEventListener('touchstart', function(e) {
 	    var touchobj = e.changedTouches[0];
@@ -23,12 +21,14 @@ utils.swipedetect = function(el, callback) {
 	    startX = touchobj.pageX;
 	    startY = touchobj.pageY;
 	    startTime = new Date().getTime();
-	    
-	    e.preventDefault();
+
+	    if (preventDefault)
+	    	e.preventDefault();
 	}, false);
 			  
 	touchsurface.addEventListener('touchmove', function(e) {
-	    e.preventDefault();
+		if (preventDefault)
+	    	e.preventDefault();
 	}, false);
 			  
 	touchsurface.addEventListener('touchend', function(e) {
@@ -47,6 +47,8 @@ utils.swipedetect = function(el, callback) {
 	    }
 			    
 	    handleswipe(swipedir);
-		e.preventDefault();
+
+	    if (preventDefault)
+			e.preventDefault();
 	}, false);
 };

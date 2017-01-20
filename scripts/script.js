@@ -212,12 +212,11 @@
 
 		utils.swipedetect($("pages"), function(direction) {
 			if (direction == "up") {
+				
 				// header
 				$('header').style.height = "85px";
 				$('header').querySelector('h3').style['line-height'] = "50px";
-				// $('header').querySelector('h3').style['margin-top'] = "0";
 				$('header').querySelector('h3').style['font-size'] = "20px";
-				// $('header-icon').style['margin-top'] = "-20px";
 
 				//container
 				$('container').style['margin-top'] = "86px";
