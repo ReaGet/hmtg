@@ -98,7 +98,7 @@ header #tabs li a i {
 	top: 0;
 	bottom: 0;
 	margin: auto;
-	background-image: url("../res/spritesheet.png");
+	background-image: url("../img/spritesheet.png");
 	background-repeat: no-repeat;
 	background-size: 24px;
 }
@@ -210,5 +210,14 @@ header #tabs li a#active-tab {
 	height: 30px;
 	margin: 25px;
 	border-radius: 3px;
-	background: #ff7777;
+	background-color: #ff7777;
+	background-image: url("../img/add-plus-button.png");
+	background-repeat: no-repeat;
+	background-size: 15px;
+	background-position: center;
+	transition: background .2s ease-in-out;
+}
+
+#container #pages .page .list li .card-btn-box .btn:active {
+	background-color: #ff5555;
 }
