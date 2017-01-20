@@ -46,7 +46,7 @@ utils.swipedetect = function(el, callback, preventDefault) {
 	        }
 	    }
 			    
-	    handleswipe(swipedir);
+	    handleswipe({ direction: swipedir, distX: Math.abs(distX), distY: Math.abs(distY) });
 
 	    if (preventDefault)
 			e.preventDefault();

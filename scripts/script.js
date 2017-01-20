@@ -210,16 +210,25 @@
 
 		window.addEventListener('mousedown', setActive);
 
-		utils.swipedetect($("pages"), function(direction) {
-			if (direction == "up") {
-				
+		utils.swipedetect($("pages"), function(scope) {
+			if (scope.direction == "up") {
+
 				// header
 				$('header').style.height = "85px";
 				$('header').querySelector('h3').style['line-height'] = "50px";
 				$('header').querySelector('h3').style['font-size'] = "20px";
 
 				//container
-				$('container').style['margin-top'] = "86px";
+				$('container').style['-webkit-transform'] = "translate3d(0, 86px, 0)";
+			}
+			if (scope.direction == "down" && scope.distY > 250) {
+				// header
+				$('header').style.height = "199px";
+				$('header').querySelector('h3').style['line-height'] = "190px";
+				$('header').querySelector('h3').style['font-size'] = "26px";
+
+				//container
+				$('container').style['-webkit-transform'] = "translate3d(0, 200px, 0)";
 			}
 		});
 
