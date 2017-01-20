@@ -23,18 +23,22 @@ header {
 
 header h3 {
 	text-align: center;
-	line-height: 170px;
-	font-size: 24px;
+	line-height: 190px;
+	font-size: 26px;
 	font-family: monospace;
 	color: #ff7777;
 }
 
-header h3:before {
+header, h3 {
+	transition: all .2s ease-in-out;
+}
+
+/*header h3:before {
 	content: "рублей";
 	position: absolute;
 	font-size: 13px;
 	margin: 25px 7px;
-}
+}*/
 
 header #tabs {
 	list-style: none;
@@ -108,27 +112,6 @@ header #tabs li a.cost-icon-active i {
 	background-position: 0 -24px;
 }
 
-/*
-header #tabs li a.products-icon:hover {
-	background-image: url("../res/products-icon-active-2.png");
-}
-
-header #tabs li a.people-icon {
-	background-image: url("../res/people-icon-1.png");
-}
-
-header #tabs li a.people-icon:hover {
-	background-image: url("../res/people-icon-active-1.png");
-}
-
-header #tabs li a.cost-icon {
-	background-image: url("../res/cost-icon-1.png");
-}
-
-header #tabs li a.cost-icon:hover {
-	background-image: url("../res/cost-icon-active-1.png");
-} */
-
 header #tabs li a#active-tab {
 	margin: 0 10px 0px 10px;
 	border-bottom: 5px solid #ff7777;
@@ -142,6 +125,7 @@ header #tabs li a#active-tab {
 	margin-top: 200px;
 	position: absolute;
 	background: #f9f9f9;
+	transition: margin .2s ease-in-out;
 }
 
 #container #pages {
