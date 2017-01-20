@@ -202,13 +202,14 @@
 
 (function() {
 	window.onload = function() {
-		var tabs = $("tabs").getElementsByTagName("li"),
-			pages = $("pages").getElementsByTagName("li");
+		var tabs = $("tabs").childNodes,
+			pages = $("pages").childNodes,
+			currentTab = 0;
 
-		tabs = toArray(tabs);
-		pages = toArray(pages);
+		tabs = toArray(tabs, "li");
+		pages = toArray(pages, "li");
 
-		window.addEventListener('mousedown', setActive);
+		window.addEventListener('mousedown', mousedown);
 
 		utils.swipedetect($("pages"), function(scope) {
 			if (scope.direction == "up") {
@@ -219,7 +220,8 @@
 				$('header').querySelector('h3').style['font-size'] = "20px";
 
 				//container
-				$('container').style['-webkit-transform'] = "translate3d(0, 86px, 0)";
+				$('container').style['-webkit-transform'] = "translate3d(0, -114px, 0)";
+				$('container').style['margin-bottom'] = "-200px";
 			}
 			if (scope.direction == "down" && scope.distY > 250) {
 				// header
@@ -228,11 +230,43 @@
 				$('header').querySelector('h3').style['font-size'] = "26px";
 
 				//container
-				$('container').style['-webkit-transform'] = "translate3d(0, 200px, 0)";
+				$('container').style['-webkit-transform'] = "translate3d(0, 0, 0)";
+				$('container').style['margin-bottom'] = "0";
+			}
+			if (scope.direction == "left") {
+				changeTabByIndex(1);
+			}
+			if (scope.direction == "right") {
+				changeTabByIndex(-1);
 			}
 		});
 
-		function setActive(e) {
+		function mousedown(e) {
+			changeTab(e);
+		}
+
+		function changeTabByIndex(i) {
+			if (currentTab >= 2 && i > 0 || currentTab <= 0 && i < 0)
+				return;
+
+			currentTab += i;
+
+			for (var i = 0; i < tabs.length; i++) {
+				tabs[i].childNodes[0].id = "";
+				tabs[i].childNodes[0].className = tabs[i].childNodes[0].querySelector("i").className;
+			}
+
+			tabs[currentTab].querySelector("a").id = "active-tab";
+			tabs[currentTab].querySelector("a").className += "-active";
+
+			for (var i = 0; i < pages.length; i++) {
+				pages[i].id = "";
+			}
+
+			pages[currentTab].id = "active-page";
+		}
+
+		function changeTab(e) {
 			var elem = e.target,
 				index = tabs.indexOf(elem.parentNode),
 				className = elem.className;
@@ -259,13 +293,19 @@
 				}
 
 				pages[index].id = "active-page";
+
+				currentTab = index;
 			}
 		}
 
-		function toArray(arr) {
+		function toArray(arr, selector) {
 			var t = [];
 			for (var i = 0; i < arr.length; i++) {
-				t.push(arr[i]);
+				if (!arr[i].tagName)
+					continue;
+
+				if (arr[i].tagName.toLowerCase() == selector)
+				 	t.push(arr[i]);
 			}
 			return t;
 		} 
