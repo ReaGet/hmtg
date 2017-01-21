@@ -182,20 +182,20 @@ header #tabs li a#active-tab {
 	/*background: #fff;*/
 }
 
-#container #pages .page .list li .product-info {
+#container #pages .page .list li .card-info {
 	float: left;
 	height: 80px;
 	width: auto;
 }
 
-#container #pages .page .list li .product-info span {
+#container #pages .page .list li .card-info span {
 	display: block;
 	height: 30px;
 	line-height: 30px;
 	font-family: Arial;
 }
 
-#container #pages .page .list li .product-info .product-name {
+#container #pages .page .list li .card-info .product-name {
 	width: 160px;
 	margin-left: 30px;
 	margin-top: 10px;
@@ -203,7 +203,7 @@ header #tabs li a#active-tab {
 	color: #a8a8a8;
 }
 
-#container #pages .page .list li .product-info .product-price {
+#container #pages .page .list li .card-info .product-price {
 	margin-left: 30px;
 	color: #bebebe;
 }
@@ -229,4 +229,12 @@ header #tabs li a#active-tab {
 
 #container #pages .page .list li .card-btn-box .btn:active {
 	background-color: #ff5555;
+}
+
+#container #pages .page .list li .card-info .person-name {
+	width: 160px;
+	margin-left: 30px;
+	margin-top: 25px;
+	font-weight: bold;
+	color: #a8a8a8;
 }
