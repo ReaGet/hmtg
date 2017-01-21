@@ -202,113 +202,75 @@
 
 (function() {
 	window.onload = function() {
-		var tabs = $("tabs").childNodes,
-			pages = $("pages").childNodes,
-			currentTab = 0;
-
-		tabs = toArray(tabs, "li");
-		pages = toArray(pages, "li");
-
 		window.addEventListener('mousedown', mousedown);
-
-		utils.swipedetect($("pages"), function(scope) {
-			if (scope.direction == "up") {
-
-				// header
-				$('header').style.height = "85px";
-				$('header').querySelector('h3').style['line-height'] = "50px";
-				$('header').querySelector('h3').style['font-size'] = "20px";
-
-				//container
-				$('container').style['-webkit-transform'] = "translate3d(0, -114px, 0)";
-				$('container').style['margin-bottom'] = "-200px";
-			}
-			if (scope.direction == "down" && scope.distY > 250) {
-				// header
-				$('header').style.height = "199px";
-				$('header').querySelector('h3').style['line-height'] = "190px";
-				$('header').querySelector('h3').style['font-size'] = "26px";
-
-				//container
-				$('container').style['-webkit-transform'] = "translate3d(0, 0, 0)";
-				$('container').style['margin-bottom'] = "0";
-			}
-			if (scope.direction == "left") {
-				changeTabByIndex(1);
-			}
-			if (scope.direction == "right") {
-				changeTabByIndex(-1);
-			}
-		});
+		var popupName = null,
+			openAcceptPerson = false;
 
 		function mousedown(e) {
-			changeTab(e);
+			var action = e.target.getAttribute('action');
+			switch(action) {
+				case "open":
+					openPopup(e);
+				break;
+				case "close":
+					closePopup(e);
+				break;
+				case "accept-add-person":
+					if (!openAcceptPerson) {
+						var rect = $('people').getBoundingClientRect();
+						$('accept-add-person').style['-webkit-transform'] = "translate3d(" + (e.pageX - rect.left - 15) + "px, " + (e.pageY - rect.top - 15) + "px, 0)";
+						$('accept-add-person').style.display = "block";
+						openAcceptPerson = true;
+					} else {
+						openAcceptPerson = false;
+						$('accept-add-person').style.display = "none";
+					}
+				break;
+			}
 		}
 
-		function changeTabByIndex(i) {
-			if (currentTab >= 2 && i > 0 || currentTab <= 0 && i < 0)
+		function openPopup(e) {	
+			popupName = e.target.getAttribute("popupName");		
+
+			if (!popupName || !$(popupName))
 				return;
 
-			currentTab += i;
-
-			for (var i = 0; i < tabs.length; i++) {
-				tabs[i].childNodes[0].id = "";
-				tabs[i].childNodes[0].className = tabs[i].childNodes[0].querySelector("i").className;
+			switch (popupName) {
+				case "popup-add-product":
+					$("popup-box").style.display = "block";
+					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
+				break;
+				case "popup-add-person":
+					$("popup-box").style.display = "block";
+					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
+				break;
 			}
 
-			tabs[currentTab].querySelector("a").id = "active-tab";
-			tabs[currentTab].querySelector("a").className += "-active";
-
-			for (var i = 0; i < pages.length; i++) {
-				pages[i].id = "";
-			}
-
-			pages[currentTab].id = "active-page";
+			$('accept-add-person').style.display = "none";
+			openAcceptPerson = false;
 		}
 
-		function changeTab(e) {
-			var elem = e.target,
-				index = tabs.indexOf(elem.parentNode),
-				className = elem.className;
+		function closePopup(e) {
+			$("popup-box").style.display = "none";
 
-			if (elem.tagName.toLowerCase() == 'i') {
-				index = tabs.indexOf(elem.parentNode.parentNode);
-				elem = elem.parentNode;
+			if (!popupName)
+				return;
+
+			switch (popupName) {
+				case "popup-add-product":
+					$(popupName).style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
+				break;
+				case "popup-add-person":
+					$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
+				break;
 			}
 
-			if (index > -1) {
-				if (elem.id == "active-tab")
-					return;
-
-				for (var i = 0; i < tabs.length; i++) {
-					tabs[i].childNodes[0].id = "";
-					tabs[i].childNodes[0].className = tabs[i].childNodes[0].querySelector("i").className;
-				}
-
-				elem.id = "active-tab";
-				elem.className += "-active";
-
-				for (var i = 0; i < pages.length; i++) {
-					pages[i].id = "";
-				}
-
-				pages[index].id = "active-page";
-
-				currentTab = index;
-			}
+			popupName = null;
 		}
 
-		function toArray(arr, selector) {
-			var t = [];
-			for (var i = 0; i < arr.length; i++) {
-				if (!arr[i].tagName)
-					continue;
+		function addProduct() {
 
-				if (arr[i].tagName.toLowerCase() == selector)
-				 	t.push(arr[i]);
-			}
-			return t;
-		} 
+		}
 
 		function $(id) {
 			return document.getElementById(id);

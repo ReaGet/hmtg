@@ -8,124 +8,32 @@
 		<script type="text/javascript" src="scripts/script.js"></script>
 	</head>
 	<body>
-		<header id="header">
-			<!-- <i id="header-icon">hmtg?</i> -->
-			<h3>1500</h3>
-			<ul id="tabs">
-				<li><a href="#" class="products-icon"><i class="products-icon"></i>Товары</a></li>
-				<li><a href="#" class="people-icon-active" id="active-tab"><i class="people-icon"></i>Люди</a></li>
-				<li><a href="#" class="cost-icon"><i class="cost-icon"></i>Итог</a></li>
-			</ul>
+		<header>
+			<div id="total-price">2000</div>
+			<div id="full-check"></div>
 		</header>
-		<div id="container">
-			<ul id="pages">
-				<li class="page">
-					<ul class="list">
-						<li>
-							<div class="card-info">
-								<span class="product-name">Пицца</span>
-								<span class="product-price">230</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Сок</span>
-								<span class="product-price">120</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Кальян</span>
-								<span class="product-price">31000</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Роллы</span>
-								<span class="product-price">195</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Чай</span>
-								<span class="product-price">175</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Хлопья</span>
-								<span class="product-price">99</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Мороженое</span>
-								<span class="product-price">36</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Шаурма</span>
-								<span class="product-price">150</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="product-name">Салат Цезарь</span>
-								<span class="product-price">133</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-					</ul>
-				</li>
-				<li class="page" id="active-page">
-					<ul class="list">
-						<li>
-							<div class="card-info">
-								<span class="person-name">Рифат</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-						<li>
-							<div class="card-info">
-								<span class="person-name">Ришат</span>
-							</div>
-							<div class="card-btn-box">
-								<div class="btn"></div>
-							</div>
-						</li>
-					</ul>
-				</li>
-				<li class="page">page #3</li>
-			</ul>
+		<center>
+			<div id="products">
+				<ul id="product-list">
+					<li>Пицца</li>
+					<li>Сок</li>
+					<li class="add-product" action="open" popupName="popup-add-product">+</li>
+				</ul>
+			</div>
+			<div id="people" action="accept-add-person">
+				<div id="accept-add-person" action="open" popupName="popup-add-person">+</div>
+			</div>
+		</center>
+		<div id="popup-box" action="close">
+			<div id="popup-add-product" class="popup">
+				<input type="text" name="name" placeholder="Продукт" />
+				<input type="text" name="price" placeholder="Цена" />
+				<div class="btn-save">OK</div>
+			</div>
+			<div id="popup-add-person" class="popup">
+				<input type="text" name="name" placeholder="Имя" />
+				<div class="btn-save">OK</div>
+			</div>
 		</div>
 	</body>
 </html>
