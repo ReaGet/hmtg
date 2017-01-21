@@ -202,9 +202,17 @@
 
 (function() {
 	window.onload = function() {
-		window.addEventListener('mousedown', mousedown);
+
+		window.addEventListener('mousedown', mousedown, false);
+		window.addEventListener('mouseup', mouseup, false);
+
 		var popupName = null,
-			openAcceptPerson = false;
+			openAcceptPerson = false
+			acceptPosition = { x: null, y: null },
+			downTimer = null,
+			editingProduct = false;
+
+		var total_price = 0;
 
 		function mousedown(e) {
 			var action = e.target.getAttribute('action');
@@ -221,10 +229,48 @@
 						$('accept-add-person').style['-webkit-transform'] = "translate3d(" + (e.pageX - rect.left - 15) + "px, " + (e.pageY - rect.top - 15) + "px, 0)";
 						$('accept-add-person').style.display = "block";
 						openAcceptPerson = true;
+						acceptPosition.x = (e.pageX - rect.left);
+						acceptPosition.y = (e.pageY - rect.top);
 					} else {
 						openAcceptPerson = false;
 						$('accept-add-person').style.display = "none";
+						acceptPosition.x = acceptPosition.y = null;
 					}
+				break;
+				case "add-product":
+					addProduct();
+				break;
+				case "add-person":
+					addPerson(e);
+				break;
+				case "edit":
+					clearTimeout(downTimer);
+					var target = e.target;
+					downTimer = window.setTimeout(function() {
+						var products = $('product-list').querySelectorAll('li');
+						for (var i = 0; i < products.length - 1; i++) {
+							var elem = products[i].querySelector('div');
+							elem.style.display = "block";
+						}
+						editingProduct = true;
+					}, 2000);
+				break;
+				default:
+					// var products = $('product-list').querySelectorAll('li');
+					// for (var i = 0; i < products.length - 1; i++) {
+					// 	var elem = products[i].querySelector('div');
+					// 	elem.style.display = "none";
+					// }
+					// editingProduct = false;
+				break;
+			}
+		}
+
+		function mouseup(e) {
+			var action = e.target.getAttribute('action');
+			switch(action) {
+				case "edit":
+					clearTimeout(downTimer);
 				break;
 			}
 		}
@@ -236,11 +282,13 @@
 				return;
 
 			switch (popupName) {
-				case "popup-add-product":
+				case "popup-product":
 					$("popup-box").style.display = "block";
 					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
+
+					$('popup-product').querySelector("input").focus()
 				break;
-				case "popup-add-person":
+				case "popup-person":
 					$("popup-box").style.display = "block";
 					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
 				break;
@@ -257,11 +305,12 @@
 				return;
 
 			switch (popupName) {
-				case "popup-add-product":
+				case "popup-product":
 					$(popupName).style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
 				break;
-				case "popup-add-person":
+				case "popup-person":
 					$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
+					acceptPosition.x = acceptPosition.y = null;
 				break;
 			}
 
@@ -269,7 +318,47 @@
 		}
 
 		function addProduct() {
+			var inputs = $('popup-product').querySelectorAll("input"),
+				name = inputs[0].value,
+				price = inputs[1].value;
 
+			if (isFinite(price)) {
+				$("popup-product").style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
+				$("popup-box").style.display = "none";
+
+
+				var li = document.createElement('li');
+
+				li.innerText = name;
+				li.setAttribute("type", "product");
+				$('product-list').insertBefore(li, $('product-list').childNodes[0]);
+
+				inputs[0].value = inputs[1].value = "";
+				inputs[1].className = "";
+
+				total_price += +price;
+				$("total-price").innerText = total_price;
+			} else {
+				inputs[1].className = "error";
+			}
+		}
+
+		function addPerson(e) {
+			var input = $('popup-person').querySelector("input"),
+				name = input.value;
+
+			$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
+			$("popup-box").style.display = "none";
+
+			var div = document.createElement('div');
+			div.className = "person";
+			div.innerText = name;
+			console.log()
+			div.style['-webkit-transform'] = "translate3d(" + (acceptPosition.x - 20) + "px, " + (acceptPosition.y - 20) + "px, 0)";
+			div.setAttribute("type", "person");
+			$('people').insertBefore(div, $('people').childNodes[0]);
+
+			input.value = "";
 		}
 
 		function $(id) {
