@@ -245,7 +245,6 @@
 				break;
 				case "edit":
 					clearTimeout(downTimer);
-					var target = e.target;
 					downTimer = window.setTimeout(function() {
 						var products = $('product-list').querySelectorAll('li');
 						for (var i = 0; i < products.length - 1; i++) {
@@ -276,7 +275,7 @@
 		}
 
 		function openPopup(e) {	
-			popupName = e.target.getAttribute("popupName");		
+			popupName = e.target.getAttribute("popupName");
 
 			if (!popupName || !$(popupName))
 				return;
@@ -292,7 +291,21 @@
 					$("popup-box").style.display = "block";
 					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
 				break;
+				case "popup-product-edit":
+					$("popup-box").style.display = "block";
+					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
+				break;
 			}
+
+			// switch (type) {
+			// 	case "edit":
+			// 		var name = e.target.parentNode.innerText,
+			// 			inputs = $('popup-product').querySelectorAll("input");
+
+			// 		inputs[0].value = name;
+
+			// 	break;
+			// }
 
 			$('accept-add-person').style.display = "none";
 			openAcceptPerson = false;
@@ -321,6 +334,8 @@
 			var inputs = $('popup-product').querySelectorAll("input"),
 				name = inputs[0].value,
 				price = inputs[1].value;
+
+			// if ()
 
 			if (isFinite(price)) {
 				$("popup-product").style["-webkit-transform"] = "translate3d(-250px, 0, 0)";

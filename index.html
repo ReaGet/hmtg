@@ -15,7 +15,7 @@
 		<center>
 			<div id="products">
 				<ul id="product-list">
-					<li action="edit"><div class="edit-btn" action="open" popupName="popup-product"></div>Пицца</li>
+					<li action="edit"><div class="edit-btn" action="open" popupName="popup-product-edit"></div>Пицца</li>
 					<li action="edit"><div class="edit-btn"></div>Сок</li>
 					<li class="add-product" action="open" popupName="popup-product">+</li>
 				</ul>
@@ -29,6 +29,12 @@
 			<div id="popup-product" class="popup">
 				<input type="text" name="name" placeholder="Продукт" />
 				<input type="text" name="price" placeholder="Цена" />
+				<div class="btn-save" action="add-product">OK</div>
+			</div>
+			<div id="popup-product-edit" class="popup">
+				<input type="text" name="name" placeholder="Продукт" />
+				<input type="text" name="price" placeholder="Цена" />				
+				<div class="btn-delete" action="delete-product">УДАЛИТЬ</div>
 				<div class="btn-save" action="add-product">OK</div>
 			</div>
 			<div id="popup-person" class="popup">

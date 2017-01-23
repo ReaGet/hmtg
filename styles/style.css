@@ -219,6 +219,28 @@ center .edit-btn {
 	background: rgba(244, 117, 100, .3);
 }
 
+#popup-box #popup-product-edit {
+	margin-top: 150px;
+}
+
+#popup-box .popup .btn-delete {
+	background: #7777ff;
+	width: 90px;
+	height: 30px;
+	color: #fff;
+	font-family: Arial;
+	position: absolute;
+	right: 60px;
+	bottom: 15px;
+	text-align: center;
+	line-height: 30px;
+	border-radius: 3px;
+}
+
+#popup-box .popup .btn-delete:active {
+	background: #ee5555;
+}
+
 #popup-box #popup-person {
 	margin-top: 150px;
 	height: 110px;
