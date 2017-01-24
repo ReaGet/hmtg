@@ -210,7 +210,7 @@
 			openAcceptPerson = false
 			acceptPosition = { x: null, y: null },
 			downTimer = null,
-			editingProduct = false;
+			editing = false;
 
 		var current = {
 				products: [],
@@ -220,10 +220,13 @@
 			}
 
 		function mousedown(e) {
-			var action = e.target.getAttribute('action');
+			var action = e.target.getAttribute('action'),
+				type = e.target.getAttribute('type');
 
-			if (e.target.parentNode.getAttribute("action") == "edit" && !action)
+			if (e.target.parentNode.getAttribute("action") == "edit" && !action) {
 				action = e.target.parentNode.getAttribute("action");
+				type = e.target.getAttribute('type');
+			}
 
 			switch(action) {
 				case "open":
@@ -252,27 +255,51 @@
 				case "save-product":
 					saveProduct();
 				break;
+				case "delete-product":
+
+				break;
 				case "add-person":
 					addPerson(e);
 				break;
+				case "save-person":
+					savePerson();
+				break;
+				case "delete-person":
+					deletePerson();
+				break;
 				case "edit":
 					clearTimeout(downTimer);
-					downTimer = window.setTimeout(function() {
-						var products = $('product-list').querySelectorAll('li');
-						for (var i = 0; i < products.length - 1; i++) {
-							var elem = products[i].querySelector('div');
-							elem.style.display = "block";
-						}
-						editingProduct = true;
-					}, 900);
+					if (type == "product") {
+						downTimer = window.setTimeout(function() {
+							var products = $('product-list').querySelectorAll('li');
+							for (var i = 0; i < products.length - 1; i++) {
+								var elem = products[i].querySelector('div');
+								elem.style.display = "block";
+							}
+							editing = true;
+						}, 900);
+					} else if (type == "person") {
+						downTimer = window.setTimeout(function() {
+							var people = $('people').querySelectorAll('div');
+							for (var i = 0; i < people.length - 1; i++) {
+								if (people[i].className == "person") {
+									var elem = people[i].querySelector('div');
+									elem.style.display = "block";
+								}
+							}
+							editing = true;
+						}, 900);
+					}
 				break;
 				default:
 
 				break;
 			}
 
-			if (editingProduct) {
-				if (e.target.id == "popup-product-edit" || e.target.id == "popup-box" || e.target.className == "edit-btn")
+			if (editing) {
+
+				if (e.target.id == "popup-product-edit" || e.target.id == "popup-box" || 
+					e.target.className == "edit-btn" || e.target.id == "popup-person-edit")
 					return;
 
 				var products = $('product-list').querySelectorAll('li');
@@ -280,7 +307,14 @@
 					var elem = products[i].querySelector('div');
 					elem.style.display = "none";
 				}
-				editingProduct = false;
+				var people = $('people').querySelectorAll('div');
+				for (var i = 0; i < people.length - 1; i++) {
+					if (people[i].className == "person") {
+						var elem = people[i].querySelector('div');
+						elem.style.display = "none";
+					}
+				}
+				editing = false;
 			}
 		}
 
@@ -323,7 +357,14 @@
 					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
 				break;
 				case "popup-person-edit":
+					var input = $('popup-person-edit').querySelector("input"),
+						index = e.target.parentNode.getAttribute("index");
 
+					current.index = index;
+
+					input.value = current.people[index].name;
+					$("popup-box").style.display = "block";
+					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
 				break;
 			}
 
@@ -345,6 +386,10 @@
 					$("popup-product-edit").style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
 				break;
 				case "popup-person":
+					$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
+					acceptPosition.x = acceptPosition.y = null;
+				break;
+				case "popup-person-edit":
 					$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
 					acceptPosition.x = acceptPosition.y = null;
 				break;
@@ -423,16 +468,63 @@
 			$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
 			$("popup-box").style.display = "none";
 
-			var div = document.createElement('div');
+			var div = document.createElement('div'),
+				span = document.createElement('span')
+				divEdit = document.createElement('div');
+
+			span.innerText = name;
+
 			div.className = "person";
-			div.innerText = name;
 			div.style['-webkit-transform'] = "translate3d(" + (acceptPosition.x - 20) + "px, " + (acceptPosition.y - 20) + "px, 0)";
 			div.setAttribute("type", "person");
+			div.setAttribute("action", "edit");
 			div.setAttribute("index", current.people.length);
+
+			divEdit.className = "edit-btn";
+			divEdit.setAttribute("action", "open");
+			divEdit.setAttribute("popupName", "popup-person-edit");
+
+			div.appendChild(span)
+			div.appendChild(divEdit);
+
 			$('people').insertBefore(div, $('people').childNodes[0]);
 
 			input.value = "";
 			current.people.push({ name: name });
+		}
+
+		function savePerson() {
+			var input = $('popup-person-edit').querySelector("input"),
+				people = $('people').getElementsByClassName("person"),
+				name = input.value;
+
+			current.people[current.index].name = name;
+
+			current.index = (current.people.length - current.index - 1);
+
+			people[current.index].querySelector("span").innerText = name;
+
+			input.value = "";
+
+			$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
+			$("popup-box").style.display = "none";
+		}
+
+		function deletePerson() {
+			var people = $('people').getElementsByClassName("person");
+
+			current.people.splice(current.index, 1);
+
+			current.index = (current.people.length - current.index);
+
+			$('people').removeChild(people[current.index]);
+
+			people = $('people').getElementsByClassName("person");
+
+			$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
+			$("popup-box").style.display = "none";
+
+			console.log(current.people);
 		}
 
 		function $(id) {

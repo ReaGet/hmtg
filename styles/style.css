@@ -224,6 +224,13 @@ center .edit-btn {
 	-webkit-transform: translate3d(-250px, 0, 0);
 }
 
+#popup-box #popup-person, #popup-box #popup-person-edit {
+	margin-top: 150px;
+	height: 110px;
+	-webkit-transform: translate3d(250px, 0, 0);
+	right: 0;
+}
+
 #popup-box .popup .btn-delete {
 	background: #7777ff;
 	width: 90px;
@@ -240,11 +247,4 @@ center .edit-btn {
 
 #popup-box .popup .btn-delete:active {
 	background: #ee5555;
-}
-
-#popup-box #popup-person {
-	margin-top: 150px;
-	height: 110px;
-	-webkit-transform: translate3d(250px, 0, 0);
-	right: 0;
 }

@@ -52,3 +52,11 @@ utils.swipedetect = function(el, callback, preventDefault) {
 			e.preventDefault();
 	}, false);
 };
+
+utils.toArray = function(arr) {
+	var t = [];
+	for (var i = 0; i < arr.length; i++) {
+		t.push(arr[i]);
+	}
+	return t;
+};
