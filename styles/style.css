@@ -221,6 +221,7 @@ center .edit-btn {
 
 #popup-box #popup-product-edit {
 	margin-top: 150px;
+	-webkit-transform: translate3d(-250px, 0, 0);
 }
 
 #popup-box .popup .btn-delete {
