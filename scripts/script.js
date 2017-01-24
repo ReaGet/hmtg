@@ -225,7 +225,7 @@
 
 			if (e.target.parentNode.getAttribute("action") == "edit" && !action) {
 				action = e.target.parentNode.getAttribute("action");
-				type = e.target.getAttribute('type');
+				type = e.target.parentNode.getAttribute('type');
 			}
 
 			switch(action) {
