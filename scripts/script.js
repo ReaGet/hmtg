@@ -216,7 +216,8 @@
 				products: [],
 				people: [],
 				total_price: 0,
-				index: 0
+				index: 0,
+				type: null
 			}
 
 		function mousedown(e) {
@@ -237,7 +238,7 @@
 				break;
 				case "accept-add-person":
 					if (!openAcceptPerson) {
-						var rect = $('people').getBoundingClientRect();
+						var rect = $('person-list').getBoundingClientRect();
 						$('accept-add-person').style['-webkit-transform'] = "translate3d(" + (e.pageX - rect.left - 15) + "px, " + (e.pageY - rect.top - 15) + "px, 0)";
 						$('accept-add-person').style.display = "block";
 						openAcceptPerson = true;
@@ -256,7 +257,7 @@
 					saveProduct();
 				break;
 				case "delete-product":
-
+					deleteProduct();
 				break;
 				case "add-person":
 					addPerson(e);
@@ -269,27 +270,34 @@
 				break;
 				case "edit":
 					clearTimeout(downTimer);
-					if (type == "product") {
-						downTimer = window.setTimeout(function() {
-							var products = $('product-list').querySelectorAll('li');
-							for (var i = 0; i < products.length - 1; i++) {
-								var elem = products[i].querySelector('div');
-								elem.style.display = "block";
-							}
-							editing = true;
-						}, 900);
-					} else if (type == "person") {
-						downTimer = window.setTimeout(function() {
-							var people = $('people').querySelectorAll('div');
-							for (var i = 0; i < people.length - 1; i++) {
-								if (people[i].className == "person") {
-									var elem = people[i].querySelector('div');
-									elem.style.display = "block";
-								}
-							}
-							editing = true;
-						}, 900);
-					}
+					// if (type == "product") {
+					// 	downTimer = window.setTimeout(function() {
+					// 		var products = $('product-list').getElementsByClassName('product');
+					// 		for (var i = 0; i < products.length - 1; i++) {
+					// 			var elem = products[i].querySelector('div');
+					// 			elem.style.display = "block";
+					// 		}
+					// 		editing = true;
+					// 	}, 900);
+					// } else if (type == "person") {
+					// 	downTimer = window.setTimeout(function() {
+					// 		var people = $('person-list').getElementsByClassName('person');
+					// 		for (var i = 0; i < people.length; i++) {
+					// 			var elem = people[i].querySelector('div');
+					// 			elem.style.display = "block";
+					// 		}
+					// 		editing = true;
+					// 	}, 900);
+					// }
+					current.type = type;
+					downTimer = window.setTimeout(function() {
+						var elems = $(type + '-list').getElementsByClassName(type);
+						for (var i = 0; i < elems.length; i++) {
+							var elem = elems[i].querySelector('div');
+							elem.style.display = "block";
+						}
+						editing = true;
+					}, 900);
 				break;
 				default:
 
@@ -302,19 +310,42 @@
 					e.target.className == "edit-btn" || e.target.id == "popup-person-edit")
 					return;
 
-				var products = $('product-list').querySelectorAll('li');
-				for (var i = 0; i < products.length - 1; i++) {
-					var elem = products[i].querySelector('div');
-					elem.style.display = "none";
-				}
-				var people = $('people').querySelectorAll('div');
-				for (var i = 0; i < people.length - 1; i++) {
-					if (people[i].className == "person") {
-						var elem = people[i].querySelector('div');
-						elem.style.display = "none";
-					}
-				}
-				editing = false;
+				// var products = $('product-list').querySelectorAll('li');
+				// for (var i = 0; i < products.length - 1; i++) {
+				// 	var elem = products[i].querySelector('div');
+				// 	elem.style.display = "none";
+				// }
+				// var people = $('person-list').querySelectorAll('div');
+				// for (var i = 0; i < people.length - 1; i++) {
+				// 	if (people[i].className == "person") {
+				// 		var elem = people[i].querySelector('div');
+				// 		elem.style.display = "none";
+				// 	}
+				// }
+				// editing = false;
+
+
+				// if (!$(current.type + '-list'))
+				// 	return;
+
+				// var elems = $(current.type + '-list').getElementsByClassName(current.type);
+				// for (var i = 0; i < elems.length; i++) {
+				// 	var elem = elems[i].querySelector('div');
+				// 	elem.style.display = "none";
+				// }
+
+				resetEdit("product");
+				resetEdit("person");
+
+				editing = true;
+			}
+		}
+
+		function resetEdit(name) {
+			var elems = $(name + '-list').getElementsByClassName(name);
+			for (var i = 0; i < elems.length; i++) {
+				var elem = elems[i].querySelector('div');
+				elem.style.display = "none";
 			}
 		}
 
@@ -415,6 +446,7 @@
 				li.setAttribute("type", "product");
 				li.setAttribute("action", "edit");
 				li.setAttribute("index", current.products.length);
+				li.className = "product";
 
 				div.className = "edit-btn";
 				div.setAttribute("action", "open");
@@ -423,7 +455,8 @@
 				li.appendChild(span);
 				li.appendChild(div);
 
-				$('product-list').insertBefore(li, $('product-list').childNodes[0]);
+				// $('product-list').insertBefore(li, $('product-list').childNodes[0]);
+				$('product-list').appendChild(li);
 
 				inputs[0].value = inputs[1].value = "";
 				inputs[1].className = "";
@@ -450,14 +483,30 @@
 				current.products[current.index].name = name;
 				current.products[current.index].price = price;
 
-				current.index = (current.products.length - current.index - 1);
-
 				lis[current.index].querySelector("span").innerText = name;
 
 				inputs[0].value = inputs[1].value = "";
 				inputs[1].className = "";
 			} else {
 				inputs[1].className = "error";
+			}
+		}
+
+		function deleteProduct() {
+			var people = $('product-list').getElementsByClassName("product");
+
+			current.products.splice(current.index, 1);
+
+			$('product-list').removeChild(people[current.index]);
+
+			products = $('product-list').getElementsByClassName("product");
+
+			$(popupName).style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
+			$("popup-box").style.display = "none";
+
+			for (var i = 0; i < current.products.length; i++) {
+				var p = products[i];
+				p.setAttribute("index", i);
 			}
 		}
 
@@ -487,7 +536,7 @@
 			div.appendChild(span)
 			div.appendChild(divEdit);
 
-			$('people').insertBefore(div, $('people').childNodes[0]);
+			$('person-list').appendChild(div);
 
 			input.value = "";
 			current.people.push({ name: name });
@@ -495,7 +544,7 @@
 
 		function savePerson() {
 			var input = $('popup-person-edit').querySelector("input"),
-				people = $('people').getElementsByClassName("person"),
+				people = $('person-list').getElementsByClassName("person"),
 				name = input.value;
 
 			current.people[current.index].name = name;
@@ -511,20 +560,21 @@
 		}
 
 		function deletePerson() {
-			var people = $('people').getElementsByClassName("person");
+			var people = $('person-list').getElementsByClassName("person");
 
 			current.people.splice(current.index, 1);
 
-			current.index = (current.people.length - current.index);
+			$('person-list').removeChild(people[current.index]);
 
-			$('people').removeChild(people[current.index]);
-
-			people = $('people').getElementsByClassName("person");
+			people = $('person-list').getElementsByClassName("person");
 
 			$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
 			$("popup-box").style.display = "none";
 
-			console.log(current.people);
+			for (var i = 0; i < current.people.length; i++) {
+				var p = people[i];
+				p.setAttribute("index", i);
+			}
 		}
 
 		function $(id) {
