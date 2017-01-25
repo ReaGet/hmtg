@@ -70,13 +70,13 @@ center #products #product-list {
 	width: 61px;
 	padding-right: 20px;
 	overflow-y: scroll;
-	list-style: none;
 	position: absolute;
 	top: 0;
 	bottom: 0;
 }
 
-center #products #product-list li {
+center #products #product-list .product,
+center #products #product-list .add-product {
 	border: 1px solid #aaa;
 	width: 48px;
 	height: 48px;
@@ -89,7 +89,7 @@ center #products #product-list li {
 	position: relative;
 }
 
-center #products #product-list li.add-product {
+center #products #product-list .add-product {
 	width: 28px;
 	height: 28px;
 	line-height: 30px;

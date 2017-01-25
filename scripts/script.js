@@ -213,12 +213,14 @@
 			editing = false;
 
 		var current = {
-				products: [],
-				people: [],
+				product: [],
+				person: [],
 				total_price: 0,
 				index: 0,
 				type: null
-			}
+			};
+
+		window.current = current;
 
 		function mousedown(e) {
 			var action = e.target.getAttribute('action'),
@@ -250,17 +252,15 @@
 						acceptPosition.x = acceptPosition.y = null;
 					}
 				break;
-				case "add-product":
-					addProduct();
+				case "add":
+					current.type = type;
+					add();
 				break;
 				case "save-product":
 					saveProduct();
 				break;
 				case "delete-product":
 					deleteProduct();
-				break;
-				case "add-person":
-					addPerson(e);
 				break;
 				case "save-person":
 					savePerson();
@@ -270,25 +270,6 @@
 				break;
 				case "edit":
 					clearTimeout(downTimer);
-					// if (type == "product") {
-					// 	downTimer = window.setTimeout(function() {
-					// 		var products = $('product-list').getElementsByClassName('product');
-					// 		for (var i = 0; i < products.length - 1; i++) {
-					// 			var elem = products[i].querySelector('div');
-					// 			elem.style.display = "block";
-					// 		}
-					// 		editing = true;
-					// 	}, 900);
-					// } else if (type == "person") {
-					// 	downTimer = window.setTimeout(function() {
-					// 		var people = $('person-list').getElementsByClassName('person');
-					// 		for (var i = 0; i < people.length; i++) {
-					// 			var elem = people[i].querySelector('div');
-					// 			elem.style.display = "block";
-					// 		}
-					// 		editing = true;
-					// 	}, 900);
-					// }
 					current.type = type;
 					downTimer = window.setTimeout(function() {
 						var elems = $(type + '-list').getElementsByClassName(type);
@@ -310,35 +291,12 @@
 					e.target.className == "edit-btn" || e.target.id == "popup-person-edit")
 					return;
 
-				// var products = $('product-list').querySelectorAll('li');
-				// for (var i = 0; i < products.length - 1; i++) {
-				// 	var elem = products[i].querySelector('div');
-				// 	elem.style.display = "none";
-				// }
-				// var people = $('person-list').querySelectorAll('div');
-				// for (var i = 0; i < people.length - 1; i++) {
-				// 	if (people[i].className == "person") {
-				// 		var elem = people[i].querySelector('div');
-				// 		elem.style.display = "none";
-				// 	}
-				// }
-				// editing = false;
-
-
-				// if (!$(current.type + '-list'))
-				// 	return;
-
-				// var elems = $(current.type + '-list').getElementsByClassName(current.type);
-				// for (var i = 0; i < elems.length; i++) {
-				// 	var elem = elems[i].querySelector('div');
-				// 	elem.style.display = "none";
-				// }
-
 				resetEdit("product");
 				resetEdit("person");
 
 				editing = true;
 			}
+
 		}
 
 		function resetEdit(name) {
@@ -381,8 +339,8 @@
 
 					current.index = index;
 
-					inputs[0].value = current.products[index].name;
-					inputs[1].value = current.products[index].price;
+					inputs[0].value = current.product[index].name;
+					inputs[1].value = current.product[index].price;
 
 					$("popup-box").style.display = "block";
 					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
@@ -393,7 +351,7 @@
 
 					current.index = index;
 
-					input.value = current.people[index].name;
+					input.value = current.person[index].name;
 					$("popup-box").style.display = "block";
 					$(popupName).style["-webkit-transform"] = "translate3d(0, 0, 0)";
 				break;
@@ -428,51 +386,67 @@
 
 			popupName = null;
 		}
+		
+		function add() {
+			var type = current.type;
+			var inputs = $('popup-' + type).querySelectorAll("input");
 
-		function addProduct() {
-			var inputs = $('popup-product').querySelectorAll("input"),
-				name = inputs[0].value,
-				price = inputs[1].value;
+			switch(type) {
+				case "person":
+					current.person.push({ name: inputs[0].value });
+					$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
+				break;
+				case "product":
+					if (!isFinite(inputs[1].value)) {
+						inputs[1].className = "error";
+						return;
+					}
 
-			if (isFinite(price)) {
-				$("popup-product").style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
-				$("popup-box").style.display = "none";
+					current.product.push({ 
+						name: inputs[0].value,
+						price: inputs[1].value 
+					});
 
-				var li = document.createElement('li'),
-					div = document.createElement("div"),
-					span = document.createElement("span");
+					inputs[1].className = "";
 
-				span.innerText = name;
-				li.setAttribute("type", "product");
-				li.setAttribute("action", "edit");
-				li.setAttribute("index", current.products.length);
-				li.className = "product";
 
-				div.className = "edit-btn";
-				div.setAttribute("action", "open");
-				div.setAttribute("popupName", "popup-product-edit");
-
-				li.appendChild(span);
-				li.appendChild(div);
-
-				// $('product-list').insertBefore(li, $('product-list').childNodes[0]);
-				$('product-list').appendChild(li);
-
-				inputs[0].value = inputs[1].value = "";
-				inputs[1].className = "";
-
-				current.total_price += +price;
-				$("total-price").innerText = current.total_price;
-
-				current.products.push({ name: name, price: price });
-			} else {
-				inputs[1].className = "error";
+					$(popupName).style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
+				break;
 			}
+
+			$("popup-box").style.display = "none";
+
+			var div = document.createElement('div'),
+				span = document.createElement('span')
+				divEdit = document.createElement('div');
+
+			span.innerText = inputs[0].value;
+
+			div.className = type;
+			if (current.type == "person") {
+				console.log(acceptPosition)
+				div.style['-webkit-transform'] = "translate3d(" + (acceptPosition.x - 20) + "px, " + (acceptPosition.y - 20) + "px, 0)";
+			}
+			div.setAttribute("type", type);
+			div.setAttribute("action", "edit");
+			div.setAttribute("index", current[type].length - 1);
+
+			divEdit.className = "edit-btn";
+			divEdit.setAttribute("action", "open");
+			divEdit.setAttribute("popupName", "popup-" + type + "-edit");
+
+			div.appendChild(span)
+			div.appendChild(divEdit);
+
+			$(type + '-list').appendChild(div);
+
+			for (var i = 0; i < inputs.length; i++)
+				inputs[i].value = "";
 		}
 
 		function saveProduct() {
 			var inputs = $("popup-product-edit").querySelectorAll("input"),
-				lis = $("product-list").querySelectorAll("li"),
+				divs = $("product-list").getElementsByClassName("product"),
 				name = inputs[0].value,
 				price = inputs[1].value;
 
@@ -480,10 +454,10 @@
 				$("popup-product-edit").style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
 				$("popup-box").style.display = "none";
 
-				current.products[current.index].name = name;
-				current.products[current.index].price = price;
+				current.product[current.index].name = name;
+				current.product[current.index].price = price;
 
-				lis[current.index].querySelector("span").innerText = name;
+				divs[current.index].querySelector("span").innerText = name;
 
 				inputs[0].value = inputs[1].value = "";
 				inputs[1].className = "";
@@ -495,7 +469,7 @@
 		function deleteProduct() {
 			var people = $('product-list').getElementsByClassName("product");
 
-			current.products.splice(current.index, 1);
+			current.product.splice(current.index, 1);
 
 			$('product-list').removeChild(people[current.index]);
 
@@ -504,42 +478,10 @@
 			$(popupName).style["-webkit-transform"] = "translate3d(-250px, 0, 0)";
 			$("popup-box").style.display = "none";
 
-			for (var i = 0; i < current.products.length; i++) {
+			for (var i = 0; i < current.product.length; i++) {
 				var p = products[i];
 				p.setAttribute("index", i);
 			}
-		}
-
-		function addPerson(e) {
-			var input = $('popup-person').querySelector("input"),
-				name = input.value;
-
-			$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
-			$("popup-box").style.display = "none";
-
-			var div = document.createElement('div'),
-				span = document.createElement('span')
-				divEdit = document.createElement('div');
-
-			span.innerText = name;
-
-			div.className = "person";
-			div.style['-webkit-transform'] = "translate3d(" + (acceptPosition.x - 20) + "px, " + (acceptPosition.y - 20) + "px, 0)";
-			div.setAttribute("type", "person");
-			div.setAttribute("action", "edit");
-			div.setAttribute("index", current.people.length);
-
-			divEdit.className = "edit-btn";
-			divEdit.setAttribute("action", "open");
-			divEdit.setAttribute("popupName", "popup-person-edit");
-
-			div.appendChild(span)
-			div.appendChild(divEdit);
-
-			$('person-list').appendChild(div);
-
-			input.value = "";
-			current.people.push({ name: name });
 		}
 
 		function savePerson() {
@@ -547,9 +489,7 @@
 				people = $('person-list').getElementsByClassName("person"),
 				name = input.value;
 
-			current.people[current.index].name = name;
-
-			current.index = (current.people.length - current.index - 1);
+			current.person[current.index].name = name;
 
 			people[current.index].querySelector("span").innerText = name;
 
@@ -562,7 +502,7 @@
 		function deletePerson() {
 			var people = $('person-list').getElementsByClassName("person");
 
-			current.people.splice(current.index, 1);
+			current.person.splice(current.index, 1);
 
 			$('person-list').removeChild(people[current.index]);
 
@@ -571,7 +511,7 @@
 			$(popupName).style["-webkit-transform"] = "translate3d(250px, 0, 0)";
 			$("popup-box").style.display = "none";
 
-			for (var i = 0; i < current.people.length; i++) {
+			for (var i = 0; i < current.person.length; i++) {
 				var p = people[i];
 				p.setAttribute("index", i);
 			}
